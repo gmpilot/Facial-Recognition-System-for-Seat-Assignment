@@ -1,0 +1,250 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: rgb(246, 218, 59);
+    color: #2c3e50;
+    line-height: 1.75;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Headings */
+h1,
+h2,
+h3 {
+    font-weight: 700;
+}
+
+h1 {
+    text-transform: uppercase;
+    color: #ffffff;
+    text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+    transition: color 0.3s ease;
+}
+
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #e74c3c;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Montserrat', sans-serif;
+    transition: color 0.3s ease;
+}
+
+h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #7f8c8d;
+    font-style: italic;
+    transition: color 0.3s ease;
+}
+
+/* Layout and Container */
+.container {
+    width: 85%;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+header {
+    background-color: #e74c3c;
+    color: #fff;
+    text-align: center;
+    padding: 2px 0;
+    border-bottom: 5px solid gold;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+header p {
+    color: #ecf0f1;
+    font-style: italic;
+    transition: color 0.3s ease;
+}
+
+main {
+    padding: 60px 0;
+}
+
+/* Cards */
+.card {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3px;
+    padding: 5px;
+    transition: transform 0.5s ease, box-shadow 0.5s ease, background-color 0.5s ease;
+    border-left: 8px solid #e74c3c;
+    border-right: 8px solid #e74c3c;
+    background-image: linear-gradient(135deg, #ffffff, #f4f6f9);
+}
+
+.card:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    background-color: #ecf0f1;
+}
+
+.card h2,
+.card h3 {
+    font-size: 1.6rem;
+    color: #e74c3c;
+    transition: color 0.3s ease;
+}
+
+.card:hover h2,
+.card:hover h3 {
+    color: #e74c3c;
+}
+
+.card img {
+    border-radius: 12px;
+    margin-top: 20px;
+    transition: transform 0.5s ease, filter 0.3s ease;
+    width: 100%;
+    height: auto;
+}
+
+.card img:hover {
+    transform: scale(1.1);
+    filter: brightness(0.85);
+}
+
+#controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card button {
+    background-color: #c0392b;
+    color: #fff;
+    padding: 15px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.card button:hover {
+    background-color: #e74c3c;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+}
+
+/* Layout: Two-column for large screens */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+}
+
+#output-container,
+#previous-seats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#output-container img {
+    border-radius: 12px;
+}
+
+/* Seat History */
+#seat-history {
+    list-style-type: none;
+    padding: 0;
+}
+
+#seat-history li {
+    background-color: #f8f9fa;
+    margin-bottom: 20px;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#seat-history li:nth-child(odd) {
+    background-color: #ecf0f1;
+}
+
+#seat-history li:hover {
+    background-color: #e74c3c;
+    color: #fff;
+    transform: translateX(10px);
+}
+
+/* Footer */
+footer {
+    background-color: #e74c3c;
+    color: #fff;
+    text-align: center;
+    padding: 35px 0;
+    margin-top: 50px;
+    transition: background-color 0.3s ease;
+}
+
+footer p {
+    font-size: 1.2rem;
+}
+
+footer p:hover {
+    color: #ecf0f1;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 25px;
+    }
+
+    .card button {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    #camera {
+        width: 100%;
+        max-height: 350px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .card {
+        padding: 20px;
+    }
+
+    .card button {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .container {
+        width: 95%;
+    }
+
+    footer p {
+        font-size: 1.1rem;
+    }
+}

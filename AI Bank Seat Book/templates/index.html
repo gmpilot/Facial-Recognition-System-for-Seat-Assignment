@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bank Automated Seat Booking System</title>
+    <link rel="stylesheet" href="static/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>Bank Seat Booking</h1>
+        <p>Automated Seat Allocation Based on AI</p>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div class="main-content">
+          <section id="camera-box" class="card">
+            <h2>Live Camera Feed</h2>
+            <video id="camera" width="100%" height="auto" autoplay></video>
+          </section>
+
+          <section id="controls" class="card">
+            <h3>Control Panel</h3>
+            <button id="start-camera" class="btn">Start Camera</button>
+            <button id="stop-camera" class="btn">Stop Camera</button>
+            <button id="take-seat" class="btn">Take Seat</button>
+            <button id="retake" class="btn">Retake</button>
+            <button id="stop-system" class="btn">Stop System</button>
+          </section>
+
+          <section id="output-container" class="card">
+            <h3>Captured Picture</h3>
+            <img
+              id="output-picture"
+              src=""
+              alt="Captured Seat Picture"
+              width="100%"
+              height="auto"
+            />
+            <div id="info-container">
+              <h3>Seat Information</h3>
+              <p id="seat-number">Seat Number: --</p>
+              <p id="seat-info">Seat Details: --</p>
+            </div>
+          </section>
+
+          <section id="previous-seats" class="card">
+            <h3>Previous 5 Seats</h3>
+            <ul id="seat-history">
+              <!-- Example Placeholder Entries -->
+              <li>
+                A1234: Priority 1, Age: 60, Gender: Female, Emotion: Happy
+              </li>
+              <li>
+                B5678: Priority 2, Age: 30, Gender: Male, Emotion: Neutral
+              </li>
+              <li>C9101: Priority 3, Age: 25, Gender: Male, Emotion: Sad</li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 Bank Seat Booking System | All Rights Reserved</p>
+    </footer>
+
+    <script>
+      const camera = document.getElementById("camera");
+      const startButton = document.getElementById("start-camera");
+      const stopButton = document.getElementById("stop-camera");
+      const takeSeatButton = document.getElementById("take-seat");
+      const outputPicture = document.getElementById("output-picture");
+      const seatNumberElem = document.getElementById("seat-number");
+      const seatInfoElem = document.getElementById("seat-info");
+      const seatHistoryList = document.getElementById("seat-history");
+      let videoStream;
+
+      startButton.addEventListener("click", async () => {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
+        camera.srcObject = stream;
+        videoStream = stream;
+        startButton.disabled = true;
+        stopButton.disabled = false;
+      });
+
+      stopButton.addEventListener("click", () => {
+        const tracks = videoStream.getTracks();
+        tracks.forEach((track) => track.stop());
+        camera.srcObject = null;
+        startButton.disabled = false;
+        stopButton.disabled = true;
+      });
+
+      takeSeatButton.addEventListener("click", () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = camera.videoWidth;
+        canvas.height = camera.videoHeight;
+        canvas
+          .getContext("2d")
+          .drawImage(camera, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob(async (blob) => {
+          const formData = new FormData();
+          formData.append("image", blob, "image.jpg");
+          const response = await fetch("/analyze_face", {
+            method: "POST",
+            body: formData,
+          });
+          const data = await response.json();
+          if (data.error) {
+            alert("Error: " + data.error);
+          } else {
+            outputPicture.src = URL.createObjectURL(blob);
+            seatNumberElem.textContent = "Seat Number: " + data.seat_number;
+            seatInfoElem.textContent = `Seat Details: Priority ${data.priority}, Age: ${data.age}, Gender: ${data.gender}`;
+            seatHistoryList.innerHTML = data.seat_history
+              .map(
+                (seat) =>
+                  `<li>${seat.seat_number}: Priority ${seat.priority}, Age: ${seat.age}, Gender: ${seat.gender}, Emotion: ${seat.emotion}</li>`
+              )
+              .join("");
+          }
+        });
+      });
+
+      document.getElementById("retake").addEventListener("click", () => {
+        outputPicture.src = "";
+        seatNumberElem.textContent = "Seat Number: --";
+        seatInfoElem.textContent = "Seat Details: --";
+      });
+
+      document
+        .getElementById("stop-system")
+        .addEventListener("click", () => stopButton.click());
+    </script>
+  </body>
+</html>
